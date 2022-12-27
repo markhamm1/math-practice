@@ -63,7 +63,7 @@
 					<label id="equation-option-input-label" for="equation-option-input"></label>
 					<input id="equation-option-input" type="number" inputmode="numeric">
 				</div>
-				<button id="get-equations-btn" onclick="getEquation()">Get 1st Equation</button>
+				<button id="get-equations-btn" onclick="getNewProblem()">Get 1st Equation</button>
 			</div>
 			<div id="show-equation-div">
 				<div id="math-problem" class="margin-btm">
@@ -90,7 +90,8 @@
 	let equationType = '';
 	let equationOptionsAdditionLabel = 'Largest Sum: ';
 	let equationOptionsSubtractionLabel = 'Maximum Number of Digits: ';
-	var sumAnswerElement = document.getElementById('answer-input');
+	var userAnswerElement = document.getElementById('answer-input');
+	var checkResultAnswer = document.getElementById('check-result-answer');
 
 	let correctAnswerResponses = [
 		"Correct!!!",
@@ -116,6 +117,7 @@
 	}
 
 	var getEquation = function () {
+		checkResultAnswer.innerText = '';
 		if (equationType == 'addition') {
 			getEquationAddition();
 		} else if (equationType == 'subtraction') {
@@ -157,13 +159,14 @@
 	}
 
 	var checkAnswer = function() {
-		var sumAnswer = sumAnswerElement.value;
+		debugger;
+		var userAnswer = parseInt(userAnswerElement.value);
 
-		var checkResultAnswer = document.getElementById('check-result-answer');
-
-		if (parseInt(sumAnswer) > parseInt(equationAnswer)) {
+		if (isNaN(userAnswer)) {
+			checkResultAnswer.innerText = 'Please provide an answer.';
+		} else if (userAnswer > equationAnswer) {
 			checkResultAnswer.innerText = 'Try Again, your guess was too high.';
-		} else if (parseInt(sumAnswer) < parseInt(equationAnswer)) {
+		} else if (userAnswer < equationAnswer) {
 			checkResultAnswer.innerText = 'Try Again, your guess was too low.';
 		} else {
 			var correctAnswerReponseIndex = Math.floor(Math.random() * correctAnswerResponses.length) ;
@@ -172,15 +175,13 @@
 			document.getElementById('math-problem').style.display = 'none';
 			document.getElementById('submit-answer').style.display = 'none';
 			document.getElementById('get-new-equation-btn').style.display = 'inline-block';
-
-			
 		}
 		document.getElementById('check-result-answer').style.display = 'block';
 	}
 
 	var getNewProblem = function() {
 		getEquation();
-		sumAnswerElement.value = '';
+		userAnswerElement.value = '';
 		document.getElementById('math-problem').style.display = 'inline-block';
 		document.getElementById('submit-answer').style.display = 'inline-block';
 		document.getElementById('check-result-answer').style.display = 'none';
@@ -201,6 +202,7 @@
 
 	var onClickHome = function() {
 		showHideHome();
+		document.getElementById('equation-option-input').value = '';
 		document.getElementById('equation-options').style.display = 'none';
 		document.getElementById('show-equation-div').style.display = 'none';
 	}
