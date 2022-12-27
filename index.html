@@ -5,12 +5,18 @@
 				background-color: aqua;
 				color: black;
 				font-family: Arial, Helvetica, sans-serif;
+				font-size: 42px;
+				text-align: center;
+			}
+			input {
+				font-size: 42px;
 			}
 			button {
-				width: 200px;
-				height: 30px;
+				width: 400px;
+				height: 50px;
 				border: 1px solid darkgray;
 				border-radius: 5px;
+				font-size: 32px;
 			}
 			#show-math-problem {
 				display: none;
@@ -75,7 +81,7 @@
 		var addend2 = sum - addend1;
 
 		document.getElementById('input-form').style.display = 'none';
-		document.getElementById('show-math-problem').style.display = 'block';
+		document.getElementById('show-math-problem').style.display = 'inline-block';
 
 		document.getElementById('addend1').innerText = addend1 >= addend2 ? addend1 : addend2;
 		document.getElementById('addend2').innerText = addend1 >= addend2 ? addend2 : addend1;
@@ -93,7 +99,7 @@
 		} else {
 			checkResultAnswer.innerText = 'Correct!!!';
 			document.getElementById('submit-answer').style.display = 'none';
-			document.getElementById('get-new-equation-btn').style.display = 'block';
+			document.getElementById('get-new-equation-btn').style.display = 'inline-block';
 		}
 		document.getElementById('check-result-answer').style.display = 'block';
 	}
@@ -101,7 +107,7 @@
 	var getNewProblem = function() {
 		getEquation();
 		sumAnswerElement.value = '';
-		document.getElementById('submit-answer').style.display = 'block';
+		document.getElementById('submit-answer').style.display = 'inline-block';
 		document.getElementById('check-result-answer').style.display = 'none';
 		document.getElementById('get-new-equation-btn').style.display = 'none';
 	}
