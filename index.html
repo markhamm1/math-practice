@@ -44,14 +44,14 @@
 			<div id="input-form">
 				<div class="margin-btm">
 					<label for="largest-sum">Largest Sum: </label>
-					<input id="largest-sum" type="number" onkeydown="onClickEnter('largest-sum')">
+					<input id="largest-sum" type="number" inputmode="numeric" onkeydown="onClickEnter('largest-sum')">
 				</div>
 				<button id="get-equations-btn" onclick="getEquation()">Get 1st Equation</button>
 			</div>
 			<div id="show-math-problem">
 				<div id="math-problem" class="margin-btm">
 					<h3 id="addend1" class="addend"></h3> + <h3 id="addend2" class="addend"></h3> = 
-					<input id="answer-input" type="number" onkeydown="onClickEnter('answer-input')">
+					<input id="answer-input" type="number" inputmode="numeric" onkeydown="onClickEnter('answer-input')">
 				</div>
 				<button id="submit-answer" onclick="checkAnswer()" class="margin-btm">Check Answer</button>
 				<div id="check-result-answer" class="margin-btm"></div>
