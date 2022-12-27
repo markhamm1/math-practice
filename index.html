@@ -19,10 +19,22 @@
 				font-size: 32px;
 				margin-top: 50px;
 			}
-			#show-math-problem {
+			#equation-options {
 				display: none;
 			}
-			.addend {
+			#equation-options-addition {
+				display: none;
+			}
+			#equation-options-subtraction {
+				display: none;
+			}
+			#show-equation-div {
+				display: none;
+			}
+			#home-btn-div {
+				display: none;
+			}
+			.equation-display {
 				display: inline;
 			}
 			#check-result-answer {
@@ -42,21 +54,29 @@
 			<h1>Equations</h1>
 		</div>
 		<div id="body">
-			<div id="input-form">
-				<div class="margin-btm">
-					<label for="largest-sum">Largest Sum: </label>
-					<input id="largest-sum" type="number" inputmode="numeric" onkeydown="onClickEnter('largest-sum')">
+			<div id="home-screen">
+				<button onclick="onClickAddition()">ADDITION</button>
+				<button onclick="onClickSubtraction()">SUBTRACTION</button>
+			</div>
+			<div id="equation-options">
+				<div id="equation-options-input-div" class="margin-btm">
+					<label id="equation-option-input-label" for="equation-option-input"></label>
+					<input id="equation-option-input" type="number" inputmode="numeric">
 				</div>
 				<button id="get-equations-btn" onclick="getEquation()">Get 1st Equation</button>
 			</div>
-			<div id="show-math-problem">
+			<div id="show-equation-div">
 				<div id="math-problem" class="margin-btm">
-					<h3 id="addend1" class="addend"></h3> + <h3 id="addend2" class="addend"></h3> = 
-					<input id="answer-input" type="number" inputmode="numeric" onkeydown="onClickEnter('answer-input')">
+					<!-- <h3 id="addend1" class="addend"></h3> + <h3 id="addend2" class="addend"></h3> =  -->
+					<h3 id="equation-display" class="equation-display"></h3>
+					<input id="answer-input" type="number" inputmode="numeric">
 				</div>
 				<button id="submit-answer" onclick="checkAnswer()" class="margin-btm">Check Answer</button>
 				<div id="check-result-answer" class="margin-btm"></div>
 				<button id="get-new-equation-btn" onclick="getNewProblem()">Get New Problem</button>
+			</div>
+			<div id="home-btn-div">
+				<button onclick="onClickHome()">HOME</button>
 			</div>
 	
 		</div>
@@ -66,26 +86,74 @@
 
 </html>
 <script>
-	let sum = 0
+	let equationAnswer = 0;
+	let equationType = '';
+	let equationOptionsAdditionLabel = 'Largest Sum: ';
+	let equationOptionsSubtractionLabel = 'Maximum Number of Digits: ';
 	var sumAnswerElement = document.getElementById('answer-input');
 
+	let correctAnswerResponses = [
+		"Correct!!!",
+		"Great Job!!!",
+		"You're So Smart!",
+		"That's Right!"
+	]
 
-	var getEquation = function() {
-		var largestSumEl = document.getElementById('largest-sum');
-		// var mostNumbersElement = document.getElementById('most-numbers');
+	var onClickAddition = function() {
+		showHideHome();
+		equationType = 'addition';
+		document.getElementById('equation-options').style.display = 'block';
+		document.getElementById('equation-options-input-div').style.display = 'block';
+		document.getElementById('equation-option-input-label').innerText = equationOptionsAdditionLabel;
+	}
 
-		var largestSum = largestSumEl.value;
+	var onClickSubtraction = function() {
+		showHideHome();
+		equationType = 'subtraction';
+		document.getElementById('equation-options').style.display = 'block';
+		document.getElementById('equation-options-input-div').style.display = 'block';
+		document.getElementById('equation-option-input-label').innerText = equationOptionsSubtractionLabel;
+	}
+
+	var getEquation = function () {
+		if (equationType == 'addition') {
+			getEquationAddition();
+		} else if (equationType == 'subtraction') {
+			getEquationSubtraction();
+		}
+	}
+
+	var getEquationAddition = function() {
+		var equationOptionInputEl = document.getElementById('equation-option-input');
+
+		var largestSum = equationOptionInputEl.value;
 		
-		sum = Math.floor(Math.random() * largestSum);
+		equationAnswer = Math.floor(Math.random() * largestSum);
 
-		var addend1 = Math.floor(Math.random() * sum);;
-		var addend2 = sum - addend1;
+		var addend1 = Math.floor(Math.random() * equationAnswer);;
+		var addend2 = equationAnswer - addend1;
 
-		document.getElementById('input-form').style.display = 'none';
-		document.getElementById('show-math-problem').style.display = 'inline-block';
+		var addend1ForDisplay = addend1 >= addend2 ? addend1 : addend2;
+		var addend2ForDisplay = addend1 >= addend2 ? addend2 : addend1;
 
-		document.getElementById('addend1').innerText = addend1 >= addend2 ? addend1 : addend2;
-		document.getElementById('addend2').innerText = addend1 >= addend2 ? addend2 : addend1;
+		document.getElementById('equation-display').innerText = addend1ForDisplay + ' + ' + addend2ForDisplay + ' = ';
+
+		document.getElementById('equation-options').style.display = 'none';
+		document.getElementById('show-equation-div').style.display = 'inline-block';
+	}
+
+	var getEquationSubtraction = function() {
+		var equationOptionInputEl = document.getElementById('equation-option-input');
+		var maxNumberOfDigits = parseInt(equationOptionInputEl.value);
+
+		var minuend = Math.floor(Math.random() * (maxNumberOfDigits * 10));
+		var subtrahend = Math.floor(Math.random() * minuend);
+		equationAnswer = minuend - subtrahend;
+
+		document.getElementById('equation-display').innerText = minuend + ' - ' + subtrahend + ' = ';
+
+		document.getElementById('equation-options').style.display = 'none';
+		document.getElementById('show-equation-div').style.display = 'inline-block';
 	}
 
 	var checkAnswer = function() {
@@ -93,14 +161,19 @@
 
 		var checkResultAnswer = document.getElementById('check-result-answer');
 
-		if (parseInt(sumAnswer) > parseInt(sum)) {
+		if (parseInt(sumAnswer) > parseInt(equationAnswer)) {
 			checkResultAnswer.innerText = 'Try Again, your guess was too high.';
-		} else if (parseInt(sumAnswer) < parseInt(sum)) {
+		} else if (parseInt(sumAnswer) < parseInt(equationAnswer)) {
 			checkResultAnswer.innerText = 'Try Again, your guess was too low.';
 		} else {
-			checkResultAnswer.innerText = 'Correct!!!';
+			var correctAnswerReponseIndex = Math.floor(Math.random() * correctAnswerResponses.length) ;
+
+			checkResultAnswer.innerText = correctAnswerResponses[correctAnswerReponseIndex];
+			document.getElementById('math-problem').style.display = 'none';
 			document.getElementById('submit-answer').style.display = 'none';
 			document.getElementById('get-new-equation-btn').style.display = 'inline-block';
+
+			
 		}
 		document.getElementById('check-result-answer').style.display = 'block';
 	}
@@ -108,12 +181,31 @@
 	var getNewProblem = function() {
 		getEquation();
 		sumAnswerElement.value = '';
+		document.getElementById('math-problem').style.display = 'inline-block';
 		document.getElementById('submit-answer').style.display = 'inline-block';
 		document.getElementById('check-result-answer').style.display = 'none';
 		document.getElementById('get-new-equation-btn').style.display = 'none';
 	}
 
-	document.getElementById('largest-sum').addEventListener("keypress", function(event) {
+	var showHideHome = function() {
+		var homeScreenDiv = document.getElementById('home-screen');
+		var homeBtnDiv = document.getElementById('home-btn-div');
+		if (homeScreenDiv.style.display == 'none') {
+			homeScreenDiv.style.display = 'block';
+			homeBtnDiv.style.display = 'none';
+		} else {
+			homeScreenDiv.style.display = 'none';
+			homeBtnDiv.style.display = 'block';
+		}
+	}
+
+	var onClickHome = function() {
+		showHideHome();
+		document.getElementById('equation-options').style.display = 'none';
+		document.getElementById('show-equation-div').style.display = 'none';
+	}
+
+	document.getElementById('equation-option-input').addEventListener("keypress", function(event) {
 		if (event.key === "Enter") {
 			event.preventDefault();
 			getEquation();
